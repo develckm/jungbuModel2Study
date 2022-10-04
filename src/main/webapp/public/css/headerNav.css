@@ -1,0 +1,24 @@
+@charset "UTF-8";
+body {
+	margin: 0;
+}
+#headerNav{
+	background-color: #000;
+	display: flex;
+	justify-content: space-between;
+	padding: 20px
+}
+#headerNav>ul{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+}
+/*  > : 자식 선택자
+   ' ': 자손 선택자 
+ */
+#headerNav a{
+	color: #fff;
+	padding: 5px 10px;
+	text-decoration: none;
+}

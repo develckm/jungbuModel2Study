@@ -1,0 +1,27 @@
+<%@page import="model2_study.com.dto.UserDto"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<link rel="stylesheet" href="./public/css/headerNav.css">    
+<nav id="headerNav">
+	<ul>
+		<li><a href="./userList.do">유저 리스트</a></li>
+		<li><a href="./boardList.do">게시글 리스트</a></li>
+	</ul>
+<%
+Object loginUser_obj=session.getAttribute("loginUser");
+%>	
+	
+	<div>
+		<%if(loginUser_obj==null){ %>
+		<a href="./loginForm.jsp">로그인</a>
+		<%}else{ 
+			UserDto loginUser=(UserDto)loginUser_obj;
+		%>
+		<div>
+			<a><%=loginUser.getName()%>(<%=loginUser.getUserId()%>)님 로그인</a>
+			<a href="./logout.do">로그아웃</a>
+		</div>
+		<%} %>
+	</div>
+</nav>
