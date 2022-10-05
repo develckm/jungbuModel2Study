@@ -2,6 +2,7 @@ package model2_study.com.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +18,7 @@ import model2_study.com.dto.UserDto;
 public class UserLoginServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//Controller : 요청을 처리하는 곳 
+		//MVC : Controller 요청을 처리하는 곳 
 		String user_id=req.getParameter("user_id");
 		String pw=req.getParameter("pw");
 		System.out.println(user_id+"/"+pw);
@@ -28,6 +29,8 @@ public class UserLoginServlet extends HttpServlet{
 			user=userDao.login(user_id, pw);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
+		}finally {
+			userDao.close();
 		}
 		System.out.println(user);
 		HttpSession session=req.getSession();
@@ -37,6 +40,6 @@ public class UserLoginServlet extends HttpServlet{
 		}else {
 			resp.sendRedirect("./loginForm.jsp");
 		}
-	
+		//board crud
 	}
 }

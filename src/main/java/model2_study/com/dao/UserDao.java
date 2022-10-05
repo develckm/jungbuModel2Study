@@ -12,4 +12,5 @@ public interface UserDao {
 	int update(UserDto user) throws ClassNotFoundException, SQLException;
 	int insert(UserDto user) throws ClassNotFoundException, SQLException;
 	int delete(String userId) throws ClassNotFoundException, SQLException;
+	void close();
 }

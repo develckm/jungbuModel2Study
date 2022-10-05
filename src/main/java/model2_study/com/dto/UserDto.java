@@ -16,7 +16,7 @@ import java.util.Date;
 +---------+--------------+------+-----+-------------------+-------------------+
  * */
 public class UserDto {
-//싱글톤패턴(디자인 패턴) : 접근지정자와  get set 함수를 정의해 접근의 제어하는 것 (vo,dto)
+	//캡슐화(디자인 패턴) : 접근지정자와  get set 함수를 정의해 접근의 제어하는 것 (vo,dto)
 	private String userId; //user_id
 	//db가 대소문자를 구분하지 않는 경우 언더바 표기법을 사용하는데 자바의 변수 규칙은 낙타표기법이라 lib 적용 시 문제가 생길 수 있다.
 	private String name;   

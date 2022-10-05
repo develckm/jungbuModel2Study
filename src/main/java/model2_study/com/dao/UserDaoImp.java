@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import model2_study.com.dto.UserDto;
-
+//MVC : Model db 서비스를 제공
 public class UserDaoImp implements UserDao{
 	private Connection conn;
 	private PreparedStatement pstmt;
@@ -64,12 +64,23 @@ public class UserDaoImp implements UserDao{
 	public int delete(String userId) {
 		return 0;
 	}
-
+	
+	public void close() {
+		try {
+			if(rs!=null)rs.close();
+			if(pstmt!=null)pstmt.close();
+			if(conn!=null)conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	//구조를 미리 정의하는 것 -> 설계 (추상화,interface)
 	//List<UserDto> list(page)
 	//UserDto detail(String userId)
 	//int update(UserDto user)
 	//int insert(UserDto user)
 	//int delete(String userId)
-	
+	//void close()
 }
