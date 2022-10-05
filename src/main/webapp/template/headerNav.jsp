@@ -10,13 +10,19 @@
 	</ul>
 <%
 Object loginUser_obj=session.getAttribute("loginUser");
-%>	
-	
+Object msg=session.getAttribute("msg");
+UserDto loginUser=null;
+if(msg!=null){
+%>
+	<script>alert("<%=msg%>")</script>	
+<%
+	session.removeAttribute("msg");
+}%>	
 	<div>
 		<%if(loginUser_obj==null){ %>
 		<a href="./loginForm.jsp">로그인</a>
 		<%}else{ 
-			UserDto loginUser=(UserDto)loginUser_obj;
+			loginUser=(UserDto)loginUser_obj;
 		%>
 		<div>
 			<a><%=loginUser.getName()%>(<%=loginUser.getUserId()%>)님 로그인</a>
