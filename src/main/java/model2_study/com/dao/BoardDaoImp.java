@@ -38,7 +38,7 @@ public class BoardDaoImp implements BoardDao {
 	}
 
 	@Override
-	public int delete(int boardNo) throws ClassNotFoundException, SQLException {
+	public int delete(Integer boardNo) throws ClassNotFoundException, SQLException {
 		return 0;
 	}
 
@@ -53,7 +53,7 @@ public class BoardDaoImp implements BoardDao {
 	}
 
 	@Override
-	public BoardDto detail(int boardNo) throws ClassNotFoundException, SQLException {
+	public BoardDto detail(Integer boardNo) throws ClassNotFoundException, SQLException {
 		BoardDto board=null;
 		pstmt=conn.prepareStatement(detailSql);
 		pstmt.setInt(1, boardNo);
