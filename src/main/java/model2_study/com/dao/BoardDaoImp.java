@@ -16,7 +16,7 @@ public class BoardDaoImp implements BoardDao {
 	private ResultSet rs;
 	private String insertSql="INSERT INTO BOARD (user_id, title, contents) VALUES (?,?,?)";
 	private String deleteSql="";
-	private String updateSql="";
+	private String updateSql="UPDATE BOARD SET title=?,contents=? WHERE board_no=?";
 	private String viewsUpdateSql="";
 	private String detailSql="SELECT * FROM BOARD WHERE board_no=?";
 	private String listSql="SELECT * FROM BOARD ORDER BY board_no DESC LIMIT ?,?";
@@ -44,7 +44,13 @@ public class BoardDaoImp implements BoardDao {
 
 	@Override
 	public int update(BoardDto board) throws ClassNotFoundException, SQLException {
-		return 0;
+		int update=0;
+		pstmt=conn.prepareStatement(updateSql);
+		pstmt.setString(1, board.getTitle());
+		pstmt.setString(2, board.getContents());
+		pstmt.setInt(3, board.getBoard_no());
+		update=pstmt.executeUpdate();
+		return update;
 	}
 
 	@Override

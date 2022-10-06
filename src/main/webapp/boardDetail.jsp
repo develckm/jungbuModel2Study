@@ -23,6 +23,9 @@ if(board_obj!=null){
 	</header>
 	<main style="width: 80%; margin: 0 auto;">
 		<h1>게시글 상세</h1>
+		<p style="display: flex; justify-content: flex-end;">
+			<a href="./boardUpdate.do?boardNo=<%=board.getBoard_no()%>">게시글 수정</a>
+		</p>
 		<h2><span><%=board.getBoard_no()%></span>.<%=board.getTitle() %></h2>
 		<div>
 			<p>
