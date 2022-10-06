@@ -13,8 +13,10 @@ public class SpringBoardDB {
 	private static String driver="com.mysql.cj.jdbc.Driver";
 	private static Connection conn;
 	public static Connection getConn() throws ClassNotFoundException, SQLException {
-		Class.forName(driver);
-		conn=DriverManager.getConnection(url,user,pw);
+		if(conn==null || conn.isClosed()) {
+			Class.forName(driver);
+			conn=DriverManager.getConnection(url,user,pw);			
+		}
 		return conn;
 	}//CRUD 게시판 생성 model2(ModelViewController 디자인 패턴) 
 	/*

@@ -64,6 +64,7 @@
 				<p>
 					<button type="reset">초기화</button>
 					<button>수정</button>
+					<a href="./boardDelete.do?boardNo=<%=board.getBoard_no()%>">삭제</a>
 				</p>
 			</form>
 		</div>

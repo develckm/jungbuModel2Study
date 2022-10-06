@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="./public/css/headerNav.css">    
 <nav id="headerNav">
 	<ul>
+		<li><a href="./">HOME</a></li>
+	
 		<li><a href="./userList.do">유저 리스트</a></li>
 		<li><a href="./boardList.do">게시글 리스트</a></li>
 	</ul>

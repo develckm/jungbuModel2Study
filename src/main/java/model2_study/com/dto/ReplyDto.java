@@ -1,50 +1,33 @@
 package model2_study.com.dto;
 
 import java.util.Date;
-import java.util.List;
 
 /*
 +-----------+--------------+------+-----+-------------------+-------------------+
 | Field     | Type         | Null | Key | Default           | Extra             |
 +-----------+--------------+------+-----+-------------------+-------------------+
-| board_no  | int          | NO   | PRI | NULL              | auto_increment    |
+| reply_no  | int          | NO   | PRI | NULL              | auto_increment    |
 | title     | varchar(255) | NO   |     | NULL              |                   |
 | contents  | varchar(255) | YES  |     |                   |                   |
 | post_time | datetime     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| img_path  | varchar(255) | YES  |     | NULL              |                   |
+| board_no  | int          | NO   | MUL | NULL              |                   |
 | user_id   | varchar(255) | NO   | MUL | NULL              |                   |
-| views     | int          | NO   |     | 0                 |                   |
 +-----------+--------------+------+-----+-------------------+-------------------+
-*/
-public class BoardDto {
-	private int board_no; 
-	private String title;    
+ */
+public class ReplyDto {
+	private int reply_no; 
+	private String title; 
 	private String contents; 
 	private Date post_time;
-	private String user_id;  //user.user_id가 있기 때문에 삭제해야한다. 
-	private int views;
-	
-	private UserDto user;  //board : user = N : 1 (fk user_id)
-	
-	private List<ReplyDto> replyList;  //board : reply = 1 : N (fk board_no)
-	
-	
-	public List<ReplyDto> getReplyList() {
-		return replyList;
+	private String img_path; 
+	private int board_no; 
+	private String user_id;
+	public int getReply_no() {
+		return reply_no;
 	}
-	public void setReplyList(List<ReplyDto> replyList) {
-		this.replyList = replyList;
-	}
-	public UserDto getUser() {
-		return user;
-	}
-	public void setUser(UserDto user) {
-		this.user = user;
-	}
-	public int getBoard_no() {
-		return board_no;
-	}
-	public void setBoard_no(int board_no) {
-		this.board_no = board_no;
+	public void setReply_no(int reply_no) {
+		this.reply_no = reply_no;
 	}
 	public String getTitle() {
 		return title;
@@ -64,25 +47,28 @@ public class BoardDto {
 	public void setPost_time(Date post_time) {
 		this.post_time = post_time;
 	}
+	public String getImg_path() {
+		return img_path;
+	}
+	public void setImg_path(String img_path) {
+		this.img_path = img_path;
+	}
+	public int getBoard_no() {
+		return board_no;
+	}
+	public void setBoard_no(int board_no) {
+		this.board_no = board_no;
+	}
 	public String getUser_id() {
 		return user_id;
 	}
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
-	public int getViews() {
-		return views;
-	}
-	public void setViews(int views) {
-		this.views = views;
-	}
 	@Override
 	public String toString() {
-		return "\"emp\":{ \"board_no\":" + board_no + ",\"title\":\"" + title + "\",\"contents\":\"" + contents
-				+ "\",\"post_time\":\"" + post_time + "\",\"user_id\":\"" + user_id + "\",\"views\":" + views
-				+ ",\"user\":\"" + user + "\" }";
+		return "\"reply\":{ \"reply_no\":" + reply_no + ",\"title\":\"" + title + "\",\"contents\":\"" + contents
+				+ "\",\"post_time\":\"" + post_time + "\",\"img_path\":\"" + img_path + "\",\"board_no\":" + board_no
+				+ ",\"user_id\":\"" + user_id + "\" }";
 	}
-
-
-
 }

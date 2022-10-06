@@ -1,6 +1,8 @@
 package model2_study.com.servlet;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import model2_study.com.dao.BoardDao;
 import model2_study.com.dao.BoardDaoImp;
+import model2_study.com.dao.ReplyDao;
+import model2_study.com.dao.ReplyDaoImp;
+import model2_study.com.dao.SpringBoardDB;
 import model2_study.com.dto.BoardDto;
+import model2_study.com.dto.ReplyDto;
 
 @WebServlet("/boardDetail.do")
 public class BoardDetailServlet extends HttpServlet{
@@ -22,12 +28,19 @@ public class BoardDetailServlet extends HttpServlet{
 		String errorPage="./boardList.do";//실패시 리스트로 이동
 		String forwardPage="./boardDetail.jsp"; //성공시 출력할 view 페이지
 		BoardDao boardDao=null;
+		ReplyDao replyDao=null;
 		try {
 			int boardNo=Integer.parseInt(boardNo_str);
 			boardDao=new BoardDaoImp();
+			replyDao=new ReplyDaoImp();
 			boardDto=boardDao.detail(boardNo);
+			List<ReplyDto> replyList=replyDao.listFindByBoardNo(1, boardNo);
+			boardDto.setReplyList(replyList);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if(boardDao!=null)boardDao.close();
+			if(replyDao!=null)replyDao.close();
 		}
 		if(boardDto==null) {
 			resp.sendRedirect(errorPage);

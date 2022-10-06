@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model2_study.com.dto.BoardDto;
+import model2_study.com.dto.ReplyDto;
+import model2_study.com.dto.UserDto;
 
 public class BoardDaoImp implements BoardDao {
 	//db 접속해서 dql or dml 을 실행하는 객체 
@@ -15,17 +17,26 @@ public class BoardDaoImp implements BoardDao {
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	private String insertSql="INSERT INTO BOARD (user_id, title, contents) VALUES (?,?,?)";
-	private String deleteSql="";
+	private String deleteSql="DELETE FROM BOARD WHERE board_no=?";
 	private String updateSql="UPDATE BOARD SET title=?,contents=? WHERE board_no=?";
 	private String viewsUpdateSql="";
-	private String detailSql="SELECT * FROM BOARD WHERE board_no=?";
+//	private String detailSql="SELECT b.*,u.*,r.reply_no,r.img_path, "
+//							+ " r.title r_title, "
+//							+ " r.contents r_contents,"
+//							+ " r.post_time r_post_time,"
+//							+ " r.user_id r_user_id"
+//							+ " FROM BOARD b"
+//							+ " INNER JOIN USER u USING(user_id) "
+//							+ " LEFT JOIN REPLY r USING (board_no) "
+//							+ " WHERE board_no=?";
+	private String detailSql="SELECT * FROM BOARD INNER JOIN USER USING(user_id) WHERE board_no=?";
 	private String listSql="SELECT * FROM BOARD ORDER BY board_no DESC LIMIT ?,?";
 	private final int ROWS=7; //list 출력시 한페이지에 보이는 row의 수
 	//생성자를 호출할때 db를 접속해서 다른 쿼리를 실행할때 한번 접속한 객체를 사용 ??(싱글톤패턴과 유사)
 	public BoardDaoImp() throws ClassNotFoundException, SQLException {
 		conn=SpringBoardDB.getConn();
-	}
-	
+		System.out.println(conn);
+	}	
 	@Override
 	public int insert(BoardDto board) throws ClassNotFoundException, SQLException {
 		int insert=0;
@@ -39,7 +50,11 @@ public class BoardDaoImp implements BoardDao {
 
 	@Override
 	public int delete(Integer boardNo) throws ClassNotFoundException, SQLException {
-		return 0;
+		int delete=0;
+		pstmt=conn.prepareStatement(deleteSql);
+		pstmt.setInt(1, boardNo);
+		delete=pstmt.executeUpdate();
+		return delete;
 	}
 
 	@Override
@@ -64,6 +79,7 @@ public class BoardDaoImp implements BoardDao {
 		pstmt=conn.prepareStatement(detailSql);
 		pstmt.setInt(1, boardNo);
 		rs=pstmt.executeQuery();
+		int count=0;
 		if(rs.next()) {
 			board=new BoardDto();
 			board.setBoard_no(rs.getInt("board_no"));
@@ -72,7 +88,17 @@ public class BoardDaoImp implements BoardDao {
 			board.setContents(rs.getString("contents"));
 			board.setUser_id(rs.getString("user_id"));
 			board.setPost_time(rs.getDate("post_time"));
-		}
+			UserDto user=new UserDto();
+			user.setUserId(rs.getString("user_id"));
+			user.setPw(rs.getString("pw"));
+			user.setEmail(rs.getString("email"));
+			user.setPhone(rs.getString("phone"));
+			user.setName(rs.getString("name"));
+			user.setSignup(rs.getDate("signup"));
+			user.setBirth(rs.getDate("birth"));
+			board.setUser(user);				
+		} 
+		
 		System.out.println(board);
 		return board;
 	}

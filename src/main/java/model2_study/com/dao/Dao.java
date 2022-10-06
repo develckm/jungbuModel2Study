@@ -8,8 +8,8 @@ import model2_study.com.dto.UserDto;
 public interface Dao <T,P>{
 	List<T> list(int page) throws ClassNotFoundException, SQLException;
 	T detail(P pk) throws ClassNotFoundException, SQLException;
-	int update(T user) throws ClassNotFoundException, SQLException;
-	int insert(T user) throws ClassNotFoundException, SQLException;
+	int update(T dto) throws ClassNotFoundException, SQLException;
+	int insert(T dto) throws ClassNotFoundException, SQLException;
 	int delete(P pk) throws ClassNotFoundException, SQLException;
 	void close();
 

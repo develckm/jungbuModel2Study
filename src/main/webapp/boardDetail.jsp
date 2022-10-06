@@ -1,3 +1,4 @@
+<%@page import="model2_study.com.dto.ReplyDto"%>
 <%@page import="model2_study.com.dto.BoardDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -30,14 +31,24 @@ if(board_obj!=null){
 		<div>
 			<p>
 				<strong><%=board.getUser_id()%></strong> 
-				<span>()</span> 
-				/ <span><%=board.getPost_time()%></span>
+				<span>(<%=board.getUser().getName() %>)</span>
+				/ <span><%=board.getUser().getEmail() %></span>
+			</p>
+			<p>
+				<span><%=board.getPost_time()%></span>
 				/ <span><%=board.getViews()%></span>
 			</p>
 		</div>
 		<div>
 			<%=board.getContents() %>
 		</div>
-	</main>
+		<section id="replysContainer">
+			<ul>
+				<%for( ReplyDto reply : board.getReplyList()){ %>
+					<li><%=reply%></li>
+				<%} %>
+			</ul>
+		</section>
+ 	</main>
 </body>
 </html>
