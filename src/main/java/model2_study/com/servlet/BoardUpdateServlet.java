@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import model2_study.com.dao.BoardDao;
 import model2_study.com.dao.BoardDaoImp;
 import model2_study.com.dto.BoardDto;
+import model2_study.com.dto.UserDto;
 
 @WebServlet("/boardUpdate.do")
 public class BoardUpdateServlet extends HttpServlet {
@@ -20,16 +21,32 @@ public class BoardUpdateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//updateForm.jsp 를 forward  
 		String boardNo_str=req.getParameter("boardNo");
+		Object loginUser_obj=req.getSession().getAttribute("loginUser");
+		UserDto loginUser=(loginUser_obj!=null)?(UserDto)loginUser_obj:null;
+	
 		BoardDao boardDao=null;
 		BoardDto boardDto=null;
+		String msg=null; //오류가 있을 때 메시지 작성
 		try {
 			boardDao=new BoardDaoImp();
-			boardDto=boardDao.detail(Integer.parseInt(boardNo_str));
+			boardDto=boardDao.detail(Integer.parseInt(boardNo_str));		
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		req.setAttribute("board", boardDto);
-		req.getRequestDispatcher("./boardUpdateForm.jsp").forward(req, resp);
+		//삼항연산자의 중첩 
+		msg=(boardDto==null)?"조회실패":
+				(loginUser==null)?"로그인하세요":
+					(!loginUser.getUserId().equals(boardDto.getUser_id()))?"작성자만 수정 가능":
+						null;
+		if(msg!=null) {
+			req.getSession().setAttribute("msg", msg);
+			resp.sendRedirect("./boardList.do");			
+		}else {
+			System.out.println("오류가 없어서 폼으로 이동!!");
+			req.setAttribute("board", boardDto);
+			req.getRequestDispatcher("./boardUpdateForm.jsp").forward(req, resp);
+		}
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -64,5 +81,6 @@ public class BoardUpdateServlet extends HttpServlet {
 			req.getSession().setAttribute("msg", "수정실패");
 			resp.sendRedirect(errorPage);
 		}
+		
 	}
 }
