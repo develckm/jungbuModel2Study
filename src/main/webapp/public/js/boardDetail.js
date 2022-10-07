@@ -68,7 +68,6 @@ replyInsert.onsubmit=function (e){
 				reload();
 			}else{
 				alert("등록 실패!")
-
 			}
 		});
 }
