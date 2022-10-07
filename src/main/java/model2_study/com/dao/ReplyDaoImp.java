@@ -14,6 +14,7 @@ public class ReplyDaoImp implements ReplyDao{
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	private String listFindByBoardNoSql="SELECT * FROM REPLY WHERE board_no=? LIMIT ?,?";
+	private String insertSql="INSERT INTO REPLY (board_no,title,contents,user_id) VALUES (?,?,?,?)";
 	private final int ROWS=10;
 	public ReplyDaoImp() throws Exception {
 		conn=SpringBoardDB.getConn();
@@ -36,7 +37,14 @@ public class ReplyDaoImp implements ReplyDao{
 
 	@Override
 	public int insert(ReplyDto reply) throws ClassNotFoundException, SQLException {
-		return 0;
+		int insert=0;
+		pstmt=conn.prepareStatement(insertSql);
+		pstmt.setInt(1, reply.getBoard_no());
+		pstmt.setString(2, reply.getTitle());
+		pstmt.setString(3, reply.getContents());
+		pstmt.setString(4, reply.getUser_id());
+		insert=pstmt.executeUpdate();
+		return insert;
 	}
 
 	@Override

@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>게시글 상세</title>
+<script src="./public/js/boardDetail.js" defer="defer"></script>
 </head>
 <body>
 <%
@@ -42,6 +43,33 @@ if(board_obj!=null){
 		<div>
 			<%=board.getContents() %>
 		</div>
+		<p>
+			<button id="replysReload" value="<%=board.getBoard_no()%>">새로고침</button>
+		</p>
+		<div style="background-color: #eee">
+			<h3>댓글 등록</h3>
+			<form action="./replyInsert.do" name="replyInsert" method="post">
+				<input type="hidden" name="boardNo" value="<%=board.getBoard_no()%>">
+				<p>
+					<label>제목 :
+						<input type="text" name="title" value="리플제목">
+					</label>
+				</p>
+				<p>	
+					<label>글쓴이 :
+						<input type="text" name="userId" value="awriter">
+					</label>
+				</p>
+				<div>
+					<label>내용 : 
+						<textarea rows="" cols="" name="contents">글내용입니다.</textarea>
+					</label>
+				</div>
+				<p><button>등록</button></p>
+			</form>
+		</div>
+		
+		
 		<section id="replysContainer">
 			<ul>
 				<%for( ReplyDto reply : board.getReplyList()){ %>
