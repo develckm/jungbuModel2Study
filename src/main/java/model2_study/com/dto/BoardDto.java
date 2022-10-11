@@ -26,8 +26,14 @@ public class BoardDto {
 	private UserDto user;  //board : user = N : 1 (fk user_id)
 	
 	private List<ReplyDto> replyList;  //board : reply = 1 : N (fk board_no)
+	private int replyCount; //sub query 
 	
-	
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
 	public List<ReplyDto> getReplyList() {
 		return replyList;
 	}

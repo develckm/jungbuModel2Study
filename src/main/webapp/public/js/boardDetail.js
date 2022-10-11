@@ -42,7 +42,7 @@ function reload(){
 	request.open("GET","./replyList.do?boardNo="+boardNo_str,true);
 	request.onreadystatechange=function(){
 		if(request.readyState==4 && request.status==200 ){ //응답이 완료된 상태
-			replysContainer.innerHTML=request.responseText;
+			replysContainer.innerHTML=request.responseText; 
 		}
 	}//통신 이벤트(send)가 발생하면 실행되는 함수 
 	request.send();	//통신 이벤트
@@ -51,6 +51,72 @@ function reload(){
 	//js XMLHttpRequest는 통신 시 스레드를 새로 생성하기 때문에 
 	//onreadystatechange 정의하거나 Promise로 스레드를 동기화 해야한다. 
 }
+
+function replyUpdateReq(e){
+	//this  event가 발생한 node	
+	let replyNo=e.target.value;
+	let updateUrl="./replyUpdate.do?replyNo="+replyNo;
+	fetch(updateUrl,{method:"GET"})
+		.then((resp)=>{
+			if(resp.status!=200){
+				alert("요청한 댓글을 찾을 수 없습니다.");
+			}else{
+				return resp.text();
+			}
+		}).then((html)=>{
+			const li=document.querySelector("#replyLi"+replyNo)
+			li.innerHTML=html;
+		})
+}
+function replyUpdateAct(e){
+	const form=e.target.form; //입렵요소에만 있는 선택자 form
+	let updateUrl="./replyUpdate.do"
+	let param="?boardNo="+form.boardNo.value
+			+"&title="+form.title.value
+			+"&contents="+form.contents.value
+			+"&userId="+form.userId.value
+			+"&replyNo="+form.replyNo.value;
+	//{insert : 0,1 }		
+	fetch(updateUrl+param,{method:"POST"})
+		.then((resp)=>{
+			if(resp.status==200){
+				return resp.json();
+			}else{
+				alert("통신실패! 다시 시도하세요.")
+			}
+		}).then((json)=>{
+			if(json.update==1){
+				alert("수정 성공");
+				reload()
+			}else{
+				alert("수정 실패! 새로 고치고 다시 시도하세요.(삭제된 레코드이거나 db 통신 오류)")
+			}
+		})
+}
+function replyDeletAct(e){
+	const form=e.target.form;
+	let replyNo=form.replyNo.value;
+	let deleteUrl="./replyUpdate.do?replyNo="+replyNo;
+	fetch(deleteUrl,{method:"DELETE"})
+		.then((resp)=>{
+			if(resp.status==200){
+				return resp.json()
+			}else{
+				alert("통신 실패, 다시 시도하세요.");
+			}
+		}).then((json)=>{
+			let msg="";
+			switch(json.delete){
+				case 1: msg="삭제 성공"; reload(); break;
+				case 0: msg="이미 삭제된 레코드 입니다."; break;
+				case -1: msg="로그인을 하세요."; break;
+				case -2: msg="작성자만 삭제 가능합니다."; break;
+				case -3: msg="통신 장애, 다시 시도하세요."; break;
+			}
+			alert(msg);
+		})
+}
+
 
 replyInsert.onsubmit=function (e){
 	e.preventDefault();//이벤트 중지! 

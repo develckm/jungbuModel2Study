@@ -20,17 +20,17 @@ if(replyList_obj!=null){
 %>
 <ul>
 	<%for(ReplyDto reply:replyList){ %>
-	<li>
+	<li id="replyLi<%=reply.getReply_no()%>">
 		<p>
 			제목 : <%=reply.getTitle() %>
 		</p>
 		<p>
 			<strong><%=reply.getReply_no()%></strong>
-			/<strong><%=reply.getUser_id()%></strong>
-			/<strong><%=reply.getPost_time()%></strong>
-			/ <button>수정</button>
-			
+			/ <strong><%=reply.getUser_id()%></strong>
+			/ <strong><%=reply.getPost_time()%></strong>
+			/ <button class="replyUpdateReqBtn" onclick="replyUpdateReq(event)"  value="<%=reply.getReply_no()%>">수정</button>
 		</p>
+		<!-- onclick=function(event){replyUpdateReq()} -->
 		<p>
 			<%=reply.getContents()%>
 		</p>
@@ -38,7 +38,8 @@ if(replyList_obj!=null){
 	</li>
 	<%} %>
 </ul>
-
+<script>
+</script>
 
 </body>
 </html>

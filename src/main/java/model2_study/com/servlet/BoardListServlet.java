@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import model2_study.com.dao.BoardDao;
 import model2_study.com.dao.BoardDaoImp;
 import model2_study.com.dto.BoardDto;
+import model2_study.com.dto.PagingDto;
 
 @WebServlet("/boardList.do")
 public class BoardListServlet extends HttpServlet{
@@ -23,11 +24,16 @@ public class BoardListServlet extends HttpServlet{
 		if( page_str!=null ) {
 			page=Integer.parseInt(page_str);
 		}
+		int count=0; 
+		PagingDto paging=null;
 		BoardDao boardDao=null;
 		List<BoardDto> boardList=null;
 		try {
 			boardDao=new BoardDaoImp();
 			boardList=boardDao.list(page);
+			count=boardDao.count();
+			paging=new PagingDto(page, count, 7);
+			
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -39,6 +45,7 @@ public class BoardListServlet extends HttpServlet{
 		if(boardList==null) {
 			resp.sendRedirect("./");
 		}else {
+			req.setAttribute("paging", paging);
 			req.setAttribute("boardList", boardList);
 			req.getRequestDispatcher("./boardList.jsp").forward(req, resp);
 		}

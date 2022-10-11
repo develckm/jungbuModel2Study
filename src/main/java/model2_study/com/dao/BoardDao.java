@@ -17,5 +17,6 @@ public interface BoardDao extends Dao<BoardDto, Integer>{
 	//dql
 	BoardDto detail(Integer boardNo) throws ClassNotFoundException,SQLException;
 	List<BoardDto> list(int page) throws ClassNotFoundException,SQLException;
+	int count() throws ClassNotFoundException,SQLException;
 	void close();
 }

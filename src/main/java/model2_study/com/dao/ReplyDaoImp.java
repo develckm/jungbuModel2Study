@@ -16,6 +16,9 @@ public class ReplyDaoImp implements ReplyDao{
 	private String listFindByBoardNoSql="SELECT * FROM REPLY WHERE board_no=? LIMIT ?,?";
 	private String insertSql="INSERT INTO REPLY (board_no,title,contents,user_id) VALUES (?,?,?,?)";
 	private final int ROWS=10;
+	private String detailSql="SELECT * FROM REPLY WHERE reply_no=?";
+	private String updateSql="UPDATE REPLY SET title=?, contents=? WHERE reply_no=?";
+	private String deleteSql="DELETE FROM REPLY WHERE reply_no=?";
 	public ReplyDaoImp() throws Exception {
 		conn=SpringBoardDB.getConn();
 		System.out.println(conn);
@@ -27,12 +30,32 @@ public class ReplyDaoImp implements ReplyDao{
 
 	@Override
 	public ReplyDto detail(Integer replyNo) throws ClassNotFoundException, SQLException {
-		return null;
+		ReplyDto reply=null;
+		pstmt=conn.prepareStatement(detailSql);
+		pstmt.setInt(1, replyNo);
+		rs=pstmt.executeQuery();
+		if(rs.next()) {
+			reply=new ReplyDto();
+			reply.setReply_no(rs.getInt("reply_no"));
+			reply.setBoard_no(rs.getInt("board_no"));
+			reply.setImg_path(rs.getString("img_path"));
+			reply.setTitle(rs.getString("title"));
+			reply.setContents(rs.getString("contents"));
+			reply.setUser_id(rs.getString("user_id"));
+			reply.setPost_time(rs.getDate("post_time"));
+		}
+		return reply;
 	}
 
 	@Override
 	public int update(ReplyDto reply) throws ClassNotFoundException, SQLException {
-		return 0;
+		int update=0;
+		pstmt=conn.prepareStatement(updateSql);
+		pstmt.setString(1, reply.getTitle());
+		pstmt.setString(2, reply.getContents());
+		pstmt.setInt(3, reply.getReply_no());
+		update=pstmt.executeUpdate();
+		return update;
 	}
 
 	@Override
@@ -49,7 +72,11 @@ public class ReplyDaoImp implements ReplyDao{
 
 	@Override
 	public int delete(Integer replyNo) throws ClassNotFoundException, SQLException {
-		return 0;
+		int delete=0;
+		pstmt=conn.prepareStatement(deleteSql);
+		pstmt.setInt(1, replyNo);
+		delete=pstmt.executeUpdate();
+		return delete;
 	}
 
 

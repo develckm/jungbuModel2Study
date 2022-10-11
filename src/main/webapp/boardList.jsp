@@ -1,3 +1,4 @@
+<%@page import="model2_study.com.dto.PagingDto"%>
 <%@page import="model2_study.com.dto.BoardDto"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -46,7 +47,7 @@ h1 {
 	<main>
 		<table id="boardList">
 			<thead>
-				<tr><th>번호</th><th>제목</th><th>게시일</th><th>글쓴이</th><th>조회</th></tr>
+				<tr><th>번호</th><th>제목</th><th>게시일</th><th>글쓴이</th><th>조회</th><th>댓글</th></tr>
 			</thead>
 			<tbody>
 			
@@ -63,6 +64,8 @@ h1 {
 					<td><%=board.getPost_time()%></td>
 					<td><%=board.getUser_id()%></td>
 					<td><%=board.getViews()%></td>
+					<td><%=board.getReplyCount()%></td>
+					
 				</tr>
 				<% 
 			}
@@ -71,14 +74,68 @@ h1 {
 			
 			</tbody>
 		</table>
-	</main>	
-	<nav>
+	</main>
+<style>
+#pagingNav{
+	display: flex;
+	justify-content: center;
+}
+#pagingNav .active{
+	border: 1px solid;
+}
+#pagingNav>ul{
+	display: flex;
+	list-style: none;
+}
+#pagingNav li{
+	padding: 5px
+}
+</style>	
+<% 
+Object paging_obj=request.getAttribute("paging");
+if(paging_obj!=null){
+	PagingDto paging=(PagingDto)paging_obj;
+	//out.append(paging.toString());
+%>		
+	<nav id="pagingNav">
 		<ul>
-			<li><a href="?page=1">1</a></li>
-			<li><a href="?page=2">2</a></li>
-			<li><a href="?page=3">3</a></li>
-			<li><a href="?page=4">4</a></li>
+			<li>
+				<a href="?page=1">
+					First
+				</a>
+			</li>
+		
+			<%if(paging.isPrev()) {%>
+			<li>
+				<a href="?page=<%=paging.getPrevPage()%>">
+					Prev
+				</a>
+			</li>
+			<%} %>
+			<%for(int i=paging.getStartPage(); i<=paging.getEndPage(); i++){ %>
+				<%if(i==paging.getPage()){ %>
+					<li class="active"><a href="?page=<%=i%>"><%=i%></a></li>
+				
+				<%}else{ %>
+					<li><a href="?page=<%=i%>"><%=i%></a></li>
+				<%} %>
+			<%} %>
+			
+			<%if(paging.isNext()) {%>
+			<li>
+				<a href="?page=<%=paging.getNextPage()%>">
+					Next
+				</a>
+			</li>
+			<%} %>
+			<li>
+				<a href="?page=<%=paging.getTotalPage()%>">
+					Last
+				</a>
+			</li>
+		
 		</ul>
 	</nav>
+<%} %>	
 </body>
 </html>

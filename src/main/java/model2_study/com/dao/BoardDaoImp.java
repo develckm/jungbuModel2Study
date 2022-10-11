@@ -30,7 +30,9 @@ public class BoardDaoImp implements BoardDao {
 //							+ " LEFT JOIN REPLY r USING (board_no) "
 //							+ " WHERE board_no=?";
 	private String detailSql="SELECT * FROM BOARD INNER JOIN USER USING(user_id) WHERE board_no=?";
-	private String listSql="SELECT * FROM BOARD ORDER BY board_no DESC LIMIT ?,?";
+	private String listSql="SELECT *,board_no no,(SELECT COUNT(*) FROM REPLY WHERE board_no=no) reply_count"
+			+ " FROM BOARD ORDER BY board_no DESC LIMIT ?,?";
+	private String countSql="SELECT COUNT(*) FROM BOARD";
 	private final int ROWS=7; //list 출력시 한페이지에 보이는 row의 수
 	//생성자를 호출할때 db를 접속해서 다른 쿼리를 실행할때 한번 접속한 객체를 사용 ??(싱글톤패턴과 유사)
 	public BoardDaoImp() throws ClassNotFoundException, SQLException {
@@ -122,9 +124,21 @@ public class BoardDaoImp implements BoardDao {
 			board.setContents(rs.getString("contents"));
 			board.setUser_id(rs.getString("user_id"));
 			board.setPost_time(rs.getDate("post_time"));
+			board.setReplyCount(rs.getInt("reply_count"));
 			boardList.add(board);
 		}
 		return boardList;
+	}
+	//list로 출력되는 결과를 Paging하기 위한 count
+	@Override
+	public int count() throws ClassNotFoundException, SQLException {
+		int count=0;
+		pstmt=conn.prepareStatement(countSql);
+		rs=pstmt.executeQuery();
+		if(rs.next()) {
+			count=rs.getInt("COUNT(*)");
+		}
+		return count;
 	}
 
 	@Override
@@ -141,10 +155,7 @@ public class BoardDaoImp implements BoardDao {
 		BoardDao boardDao=null;
 		try {
 			boardDao=new BoardDaoImp();//conn 객체 생성
-			System.out.println(boardDao.list(3));
-			System.out.println(boardDao.list(1));
-			System.out.println(boardDao.list(2));
-
+			System.out.println(boardDao.count());
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}finally {
