@@ -47,7 +47,7 @@ h1 {
 	<main>
 		<table id="boardList">
 			<thead>
-				<tr><th>번호</th><th>제목</th><th>게시일</th><th>글쓴이</th><th>조회</th><th>댓글</th></tr>
+				<tr><th>번호</th><th>제목</th><th>이미지</th><th>게시일</th><th>글쓴이</th><th>조회</th><th>댓글</th></tr>
 			</thead>
 			<tbody>
 			
@@ -61,6 +61,9 @@ h1 {
 				<tr onclick="location.href='./boardDetail.do?boardNo=<%=board.getBoard_no()%>'">
 					<td><%=board.getBoard_no()%></td>
 					<td><%=board.getTitle()%></td>
+					<td>
+						<img style="width: 50px" alt="이미지" src="public/img/thumb/<%=board.getThumbPath()%>">
+					</td>
 					<td><%=board.getPost_time()%></td>
 					<td><%=board.getUser_id()%></td>
 					<td><%=board.getViews()%></td>

@@ -1,3 +1,4 @@
+<%@page import="model2_study.com.dto.BoardImgDto"%>
 <%@page import="model2_study.com.dto.ReplyDto"%>
 <%@page import="model2_study.com.dto.BoardDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -8,6 +9,16 @@
 <meta charset="UTF-8">
 <title>게시글 상세</title>
 <script src="./public/js/boardDetail.js" defer="defer"></script>
+<style type="text/css">
+#imgContainer{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    width: 100%;
+}
+#imgContainer>img{
+	width: 100%;
+}
+</style>
 </head>
 <body>
 <%
@@ -40,6 +51,16 @@ if(board_obj!=null){
 				/ <span><%=board.getViews()%></span>
 			</p>
 		</div>
+		
+		<div id="imgContainer">
+			<%if(board.getBoardImgList()!=null){
+				for(BoardImgDto boardImg : board.getBoardImgList()){	
+			%>
+				<img src="./public/img/<%=boardImg.getImg_path()%>" alt="게시글 이미지" >
+			<%} 
+			}%>
+		</div>
+		
 		<div>
 			<%=board.getContents() %>
 		</div>

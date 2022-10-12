@@ -40,10 +40,35 @@
 				</p>
 				<p>
 					<label>
-						사진 :
-						<input type="file" name="img">
+						사진 1:
+						<input type="file" name="img1">
 					</label>
 				</p>
+				<p>
+					<label>
+						사진 2:
+						<input type="file" name="img2">
+					</label>
+				</p>
+								<p>
+					<label>
+						사진 3:
+						<input type="file" name="img3">
+					</label>
+				</p>
+				<p>
+					<label>
+						사진 4:
+						<input type="file" name="img4">
+					</label>
+				</p>
+				<p>
+					<label>
+						사진 5:
+						<input type="file" name="img5">
+					</label>
+				</p>
+				
 				<p>	
 					<label>
 						글내용 :

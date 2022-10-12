@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import model2_study.com.dao.BoardDao;
 import model2_study.com.dao.BoardDaoImp;
+import model2_study.com.dao.BoardImgDao;
+import model2_study.com.dao.BoardImgDaoImp;
 import model2_study.com.dao.ReplyDao;
 import model2_study.com.dao.ReplyDaoImp;
 import model2_study.com.dao.SpringBoardDB;
 import model2_study.com.dto.BoardDto;
+import model2_study.com.dto.BoardImgDto;
 import model2_study.com.dto.ReplyDto;
 
 @WebServlet("/boardDetail.do")
@@ -29,18 +32,26 @@ public class BoardDetailServlet extends HttpServlet{
 		String forwardPage="./boardDetail.jsp"; //성공시 출력할 view 페이지
 		BoardDao boardDao=null;
 		ReplyDao replyDao=null;
+		BoardImgDao boardImgDao=null;
 		try {
 			int boardNo=Integer.parseInt(boardNo_str);
 			boardDao=new BoardDaoImp();
 			replyDao=new ReplyDaoImp();
+			boardImgDao=new BoardImgDaoImp();
+			
 			boardDto=boardDao.detail(boardNo);
 			List<ReplyDto> replyList=replyDao.listFindByBoardNo(1, boardNo);
+			List<BoardImgDto> boardImgList=boardImgDao.boardList(boardNo);
+			
 			boardDto.setReplyList(replyList);
+			boardDto.setBoardImgList(boardImgList);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			if(boardDao!=null)boardDao.close();
 			if(replyDao!=null)replyDao.close();
+			if(boardImgDao!=null)boardImgDao.close();
 		}
 		if(boardDto==null) {
 			resp.sendRedirect(errorPage);

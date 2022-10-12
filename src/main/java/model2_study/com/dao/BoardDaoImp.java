@@ -30,11 +30,14 @@ public class BoardDaoImp implements BoardDao {
 //							+ " LEFT JOIN REPLY r USING (board_no) "
 //							+ " WHERE board_no=?";
 	private String detailSql="SELECT * FROM BOARD INNER JOIN USER USING(user_id) WHERE board_no=?";
-	private String listSql="SELECT *,board_no no,(SELECT COUNT(*) FROM REPLY WHERE board_no=no) reply_count"
+	private String listSql="SELECT *,board_no no,"
+			+ " (SELECT COUNT(*) FROM REPLY WHERE board_no=no) reply_count,"
+			+ " (SELECT img_path FROM BOARD_IMG WHERE board_no=no LIMIT 0,1) thumb_path"
 			+ " FROM BOARD ORDER BY board_no DESC LIMIT ?,?";
 	private String countSql="SELECT COUNT(*) FROM BOARD";
 	private final int ROWS=7; //list 출력시 한페이지에 보이는 row의 수
 	//생성자를 호출할때 db를 접속해서 다른 쿼리를 실행할때 한번 접속한 객체를 사용 ??(싱글톤패턴과 유사)
+	private String lastInsertId="SELECT LAST_INSERT_ID() id";
 	public BoardDaoImp() throws ClassNotFoundException, SQLException {
 		conn=SpringBoardDB.getConn();
 		System.out.println(conn);
@@ -125,6 +128,7 @@ public class BoardDaoImp implements BoardDao {
 			board.setUser_id(rs.getString("user_id"));
 			board.setPost_time(rs.getDate("post_time"));
 			board.setReplyCount(rs.getInt("reply_count"));
+			board.setThumbPath(rs.getString("thumb_path"));
 			boardList.add(board);
 		}
 		return boardList;
@@ -139,6 +143,16 @@ public class BoardDaoImp implements BoardDao {
 			count=rs.getInt("COUNT(*)");
 		}
 		return count;
+	}
+	@Override
+	public int lastInsertId() throws Exception {
+		int id=0;
+		pstmt=conn.prepareStatement(lastInsertId);
+		rs=pstmt.executeQuery();
+		if(rs.next()) {
+			id=rs.getInt("id");
+		}
+		return id;
 	}
 
 	@Override

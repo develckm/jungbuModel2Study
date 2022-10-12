@@ -26,8 +26,17 @@ public class BoardDto {
 	private UserDto user;  //board : user = N : 1 (fk user_id)
 	
 	private List<ReplyDto> replyList;  //board : reply = 1 : N (fk board_no)
-	private int replyCount; //sub query 
+	private List<BoardImgDto> boardImgList;  //board : board_img = 1 : N (fk board_no)
 	
+	private int replyCount; //sub query 
+	private String thumbPath; //sub query
+	
+	public String getThumbPath() {
+		return thumbPath;
+	}
+	public void setThumbPath(String thumbPath) {
+		this.thumbPath = thumbPath;
+	}
 	public int getReplyCount() {
 		return replyCount;
 	}
@@ -39,6 +48,12 @@ public class BoardDto {
 	}
 	public void setReplyList(List<ReplyDto> replyList) {
 		this.replyList = replyList;
+	}
+	public List<BoardImgDto> getBoardImgList() {
+		return boardImgList;
+	}
+	public void setBoardImgList(List<BoardImgDto> boardImgList) {
+		this.boardImgList = boardImgList;
 	}
 	public UserDto getUser() {
 		return user;
