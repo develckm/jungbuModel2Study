@@ -14,8 +14,13 @@
 		<div>
 			<h1>게시글 등록 폼</h1>
 			<p>(성공하면 boardList.do, 실패하면 boardInserForm.jsp)</p>
-
-			<form action="./boardInsert.do" method="post" name="boardInsertForm">
+			<p>default form : 파라미터를 Text로 보낸다.(application/x-www-form-urlencoded)</p>
+			<p>multipart/form-data : 파라미터를 Blob으로 보낸다.(파일을 전송가능)</p>
+			<p>톰캣의 request.getParameter()는 text 파라미터만 처리할 수 있다.
+				(톰캣에서 Blob 데이터 처리 메서드를 제공하지 않아서 cos jar를 이용)</p>
+			<form 
+			enctype="multipart/form-data"
+			action="./boardFileUp.do" method="post" name="boardInsertForm">
 				<p>
 					<label>
 						제목 :
@@ -31,6 +36,12 @@
 								response.sendRedirect("./loginForm.jsp");
 							}
 						%>
+					</label>
+				</p>
+				<p>
+					<label>
+						사진 :
+						<input type="file" name="img">
 					</label>
 				</p>
 				<p>	

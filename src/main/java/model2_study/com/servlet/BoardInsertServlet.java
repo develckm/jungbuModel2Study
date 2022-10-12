@@ -21,7 +21,7 @@ public class BoardInsertServlet extends HttpServlet{
 		//입력 폼 (로그인 한 사람만 해당 폼에 이동 가능,로그인 하지 않은 사람은 list로 이동)
 		//세션 객체도 파라미터에 포함된 상태
 		String forwardPage="./boardInsertForm.jsp"; //저장 실패시 이동하는 페이지
-		String redirectPage="./loginForm.jsp";
+		String redirectPage="./login.do";
 		HttpSession session=req.getSession();
 		Object loginUser_obj=session.getAttribute("loginUser");
 		

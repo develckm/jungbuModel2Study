@@ -137,5 +137,9 @@ replyInsert.onsubmit=function (e){
 			}
 		});
 }
+setTimeout( a,1000*60);
+function a(){
+	alert("sss");
+}
 
 

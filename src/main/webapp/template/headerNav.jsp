@@ -22,7 +22,7 @@ if(msg!=null){
 }%>	
 	<div>
 		<%if(loginUser_obj==null){ %>
-		<a href="./loginForm.jsp">로그인</a>
+		<a href="./login.do">로그인</a>
 		<%}else{ 
 			loginUser=(UserDto)loginUser_obj;
 		%>
