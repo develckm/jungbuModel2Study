@@ -66,11 +66,11 @@ public class ReplyUpdateServlet extends HttpServlet{
 				String[]fileTypes=multiReq.getContentType("img").split("/");
 				if(fileTypes[0].equals("image")) {
 					File oldImgFile=new File(path+"/"+imgPath); //기존 이미지 파일
-					if(oldImgFile.delete()) {
-						imgPath="reply_"+System.currentTimeMillis()+"_"+((int)(Math.random()*10000))+"."+fileTypes[1];
-						File newImgFile=new File(path+"/"+imgPath);
-						imgFile.renameTo(newImgFile);						
-					}
+					oldImgFile.delete(); 
+					imgPath="reply_"+System.currentTimeMillis()+"_"+((int)(Math.random()*10000))+"."+fileTypes[1];
+					File newImgFile=new File(path+"/"+imgPath);
+					imgFile.renameTo(newImgFile);						
+				
 				}else {
 					System.out.println("이미지가 아닌 파일 삭제 :"+imgFile.delete() );
 				}
