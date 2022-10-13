@@ -16,6 +16,12 @@ public class BoardImgDaoImp implements BoardImgDao{
 	private ResultSet rs;
 	private String insertSql="INSERT INTO BOARD_IMG (board_no,img_path) values (?,?)";
 	private String boardListSql="SELECT * FROM BOARD_IMG WHERE board_no=?";
+	
+	private String detailSql="SELECT * FROM BOARD_IMG WHERE board_img_no=?";
+	private String deleteSql="DELETE FROM BOARD_IMG WHERE board_img_no=?";
+	private String boardDeleteSql="DELETE FROM BOARD_IMG WHERE board_no=?"; //board 삭제할때 참조하는 board_img 삭제
+	private String boardCountSql="SELECT COUNT(*) cnt FROM BOARD_IMG WHERE board_no=?"; //최대 5개만 등록하려고 검사
+
 	public BoardImgDaoImp() throws Exception {
 		conn=SpringBoardDB.getConn();
 	}
@@ -27,16 +33,22 @@ public class BoardImgDaoImp implements BoardImgDao{
 
 	@Override
 	public BoardImgDto detail(Integer pk) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		BoardImgDto boardImg=null;
+		pstmt=conn.prepareStatement(detailSql);
+		pstmt.setInt(1, pk);
+		rs=pstmt.executeQuery();
+		if(rs.next()) {
+			boardImg=new BoardImgDto();
+			boardImg.setBoard_img_no(rs.getInt("board_img_no"));
+			boardImg.setBoard_no(rs.getInt("board_no"));
+			boardImg.setImg_path(rs.getString("img_path"));
+		}
+		return boardImg;
 	}
-
 	@Override
 	public int update(BoardImgDto dto) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-
 	@Override
 	public int insert(BoardImgDto dto) throws ClassNotFoundException, SQLException {
 		int insert=0;
@@ -65,22 +77,34 @@ public class BoardImgDaoImp implements BoardImgDao{
 
 	@Override
 	public int delete(Integer pk) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int delete=0;
+		pstmt=conn.prepareStatement(deleteSql);
+		pstmt.setInt(1, pk);
+		delete=pstmt.executeUpdate();
+		return delete;
 	}
 
 
 	@Override
 	public int boardDelete(int boardNo)  throws Exception{
-		// TODO Auto-generated method stub
-		return 0;
+		int delete=0;
+		pstmt=conn.prepareStatement(boardDeleteSql);
+		pstmt.setInt(1,boardNo);
+		delete=pstmt.executeUpdate();
+		return delete;
 	}
 
 
 	@Override
 	public int boardCount(int boardNo)  throws Exception{
-		// TODO Auto-generated method stub
-		return 0;
+		int boardCount=0;
+		pstmt=conn.prepareStatement(boardCountSql);
+		pstmt.setInt(1, boardNo);
+		rs=pstmt.executeQuery();
+		if(rs.next()) {
+			boardCount=rs.getInt("cnt");
+		}
+		return boardCount;
 	}
 	@Override
 	public void close() {

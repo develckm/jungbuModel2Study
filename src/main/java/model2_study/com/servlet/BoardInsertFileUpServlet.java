@@ -98,7 +98,6 @@ public class BoardInsertFileUpServlet extends HttpServlet{
 			board.setContents(contents);
 			board.setUser_id(user_id);
 			insert=boardDao.insert(board); 
-			//board_no 는 등록할 때 생성되기 때문에 알 수 있는 방법이 없다. 
 			boardNo=boardDao.lastInsertId();
 			System.out.println("게시글 등록 성공 :"+insert);
 			for(String img_path : img_paths) {
@@ -120,7 +119,7 @@ public class BoardInsertFileUpServlet extends HttpServlet{
 			for(File newFile: newFileList) {
 				System.out.println("등록된 이미지 삭제:"+newFile.delete());
 			}
-			resp.sendRedirect(errorPage);
+			resp.sendRedirect(errorPage); 
 		}
 	}
 }

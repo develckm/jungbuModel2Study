@@ -40,7 +40,6 @@ public class BoardDaoImp implements BoardDao {
 	private String lastInsertId="SELECT LAST_INSERT_ID() id";
 	public BoardDaoImp() throws ClassNotFoundException, SQLException {
 		conn=SpringBoardDB.getConn();
-		System.out.println(conn);
 	}	
 	@Override
 	public int insert(BoardDto board) throws ClassNotFoundException, SQLException {

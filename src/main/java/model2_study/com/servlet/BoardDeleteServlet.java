@@ -53,8 +53,6 @@ public class BoardDeleteServlet extends HttpServlet{
 						File file2=new File(path+"/thumb/"+boardImg.getImg_path());
 						System.out.println("삭제 파일,썸네일 :"+file.delete()+","+file2.delete());
 					}
-					
-					
 					int imgDelete=boardImgDao.boardDelete(boardNo); 
 					//참조의 제약조건이 delete on restrict 일때 꼭 삭제를 해야 board가 삭제된다.
 					delete=boardDao.delete(boardNo);									

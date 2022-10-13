@@ -99,7 +99,7 @@ public class BoardDto {
 	}
 	@Override
 	public String toString() {
-		return "\"emp\":{ \"board_no\":" + board_no + ",\"title\":\"" + title + "\",\"contents\":\"" + contents
+		return "\"board\":{ \"board_no\":" + board_no + ",\"title\":\"" + title + "\",\"contents\":\"" + contents
 				+ "\",\"post_time\":\"" + post_time + "\",\"user_id\":\"" + user_id + "\",\"views\":" + views
 				+ ",\"user\":\"" + user + "\" }";
 	}

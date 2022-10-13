@@ -21,7 +21,6 @@ public class ReplyDaoImp implements ReplyDao{
 	private String deleteSql="DELETE FROM REPLY WHERE reply_no=?";
 	public ReplyDaoImp() throws Exception {
 		conn=SpringBoardDB.getConn();
-		System.out.println(conn);
 	}
 	@Override
 	public List<ReplyDto> list(int page) throws ClassNotFoundException, SQLException {
