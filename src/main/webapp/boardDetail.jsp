@@ -69,7 +69,8 @@ if(board_obj!=null){
 		</p>
 		<div style="background-color: #eee">
 			<h3>댓글 등록</h3>
-			<form action="./replyInsert.do" name="replyInsert" method="post">
+			<form action="./replyInsert.do" enctype="multipart/form-data"
+					name="replyInsert" method="post">
 				<input type="hidden" name="boardNo" value="<%=board.getBoard_no()%>">
 				<p>
 					<label>제목 :
@@ -79,6 +80,11 @@ if(board_obj!=null){
 				<p>	
 					<label>글쓴이 :
 						<input type="text" name="userId" value="awriter">
+					</label>
+				</p>
+				<p>	
+					<label>이미지 :
+						<input type="file" name="img">
 					</label>
 				</p>
 				<div>

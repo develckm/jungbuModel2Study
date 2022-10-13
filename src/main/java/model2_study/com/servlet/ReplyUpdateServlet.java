@@ -1,5 +1,6 @@
 package model2_study.com.servlet;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -8,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import model2_study.com.dao.ReplyDao;
 import model2_study.com.dao.ReplyDaoImp;
@@ -43,13 +47,34 @@ public class ReplyUpdateServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//action : update 
 		int update=0;
-		String boardNo_str=req.getParameter("boardNo");
-		String replyNo_str=req.getParameter("replyNo");
-		String userId=req.getParameter("userId");
-		String title=req.getParameter("title");
-		String contents=req.getParameter("contents");
 		ReplyDao replyDao=null;
 		try {
+			String path=req.getServletContext().getRealPath("./public/img");
+			int maxSize=1024*1024*1;
+			DefaultFileRenamePolicy dfrp=new DefaultFileRenamePolicy();
+			MultipartRequest multiReq=new MultipartRequest(req, path,maxSize,"UTF-8",dfrp);
+			
+			String boardNo_str=multiReq.getParameter("boardNo");
+			String replyNo_str=multiReq.getParameter("replyNo");
+			String userId=multiReq.getParameter("userId");
+			String title=multiReq.getParameter("title");
+			String contents=multiReq.getParameter("contents");
+			String imgPath=multiReq.getParameter("imgPath"); //기존 이미지
+			//새로운 파일이 넘어오면 기존 이미지 삭제 후 업데이트
+			File imgFile=multiReq.getFile("img");
+			if(imgFile!=null && imgFile.exists()) {
+				String[]fileTypes=multiReq.getContentType("img").split("/");
+				if(fileTypes[0].equals("image")) {
+					File oldImgFile=new File(path+"/"+imgPath); //기존 이미지 파일
+					if(oldImgFile.delete()) {
+						imgPath="reply_"+System.currentTimeMillis()+"_"+((int)(Math.random()*10000))+"."+fileTypes[1];
+						File newImgFile=new File(path+"/"+imgPath);
+						imgFile.renameTo(newImgFile);						
+					}
+				}else {
+					System.out.println("이미지가 아닌 파일 삭제 :"+imgFile.delete() );
+				}
+			}
 			replyDao=new ReplyDaoImp();
 			ReplyDto replyDto=new ReplyDto();
 			replyDto.setBoard_no(Integer.parseInt(boardNo_str));
@@ -57,6 +82,7 @@ public class ReplyUpdateServlet extends HttpServlet{
 			replyDto.setUser_id(userId);
 			replyDto.setTitle(title);
 			replyDto.setContents(contents);
+			replyDto.setImg_path(imgPath);
 			update=replyDao.update(replyDto);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,6 +112,9 @@ public class ReplyUpdateServlet extends HttpServlet{
 				ReplyDto reply=replyDao.detail(replyNo);
 				if(reply!=null) {
 					if(loginUser.getUserId().equals(reply.getUser_id())) {
+						String path=req.getServletContext().getRealPath("./public/img");
+						File imgFile=new File(path+"/"+reply.getImg_path());
+						System.out.println("이미지 파일 삭제:"+imgFile.delete());
 						delete=replyDao.delete(replyNo);									
 					}else {
 						delete=-2;

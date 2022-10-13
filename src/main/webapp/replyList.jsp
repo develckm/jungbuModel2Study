@@ -31,9 +31,16 @@ if(replyList_obj!=null){
 			/ <button class="replyUpdateReqBtn" onclick="replyUpdateReq(event)"  value="<%=reply.getReply_no()%>">수정</button>
 		</p>
 		<!-- onclick=function(event){replyUpdateReq()} -->
-		<p>
-			<%=reply.getContents()%>
-		</p>
+		
+		<div style="display: flex;">
+			<div style="width: 25%">
+				<img alt="" src="./public/img/<%=reply.getImg_path()%>"
+				 style="width: 100%; height: 100%; object-fit: cover;">			
+			</div>
+			<div style="width: 75%">
+				<%=reply.getContents()%>
+			</div>
+		</div>
 	
 	</li>
 	<%} %>

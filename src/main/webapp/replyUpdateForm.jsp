@@ -10,10 +10,12 @@
 	}
 %>
 <form style="background-color: #eff; padding: 5px;"
+enctype="multipart/form-data"
 action="./replyUpdate.do" name="replyUpdate<%=reply.getReply_no()%>" method="post">
 	<input type="hidden" name="boardNo" value="<%=reply.getBoard_no()%>">
 	<input type="hidden" name="userId" value="<%=reply.getUser_id()%>">
 	<input type="hidden" name="replyNo" value="<%=reply.getReply_no()%>">
+	<input type="hidden" name="imgPath" value="<%=reply.getImg_path()%>">
 	<p>
 		<label>제목 :
 			<input type="text" name="title" value="<%=reply.getTitle()%>">
@@ -24,11 +26,20 @@ action="./replyUpdate.do" name="replyUpdate<%=reply.getReply_no()%>" method="pos
 		/ <label>글쓴이 : <%=reply.getUser_id()%> </label>
 		/ <label>게시일 : <%=reply.getPost_time()%> </label>
 	</p>
-	<div>
-		<label>내용 : 
-			<textarea rows="" cols="" name="contents"><%=reply.getContents()%></textarea>
+	<p>
+		<label>이미지 :
+			<input type="file" name="img">
 		</label>
-	</div>
+	</p>
+	<div style="display: flex;">
+		<div style="width: 25%">
+			<img alt="" src="./public/img/<%=reply.getImg_path()%>"
+			 style="width: 100%; height: 100%; object-fit: cover;">			
+		</div>
+		<div style="width: 75%">
+			<textarea rows="" cols="" name="contents"><%=reply.getContents()%></textarea>
+		</div>
+	</div>	
 	<p>
 		<button type="reset">초기화</button>
 		<button type="button" onclick="replyUpdateAct(event)">수정</button>

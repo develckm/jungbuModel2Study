@@ -13,15 +13,32 @@ public class ReplyDaoImp implements ReplyDao{
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	private String listFindByBoardNoSql="SELECT * FROM REPLY WHERE board_no=? LIMIT ?,?";
-	private String insertSql="INSERT INTO REPLY (board_no,title,contents,user_id) VALUES (?,?,?,?)";
+	private String listFindByBoardNoSql="SELECT * FROM REPLY WHERE board_no=? "
+			+ " ORDER BY reply_no DESC LIMIT ?,?";
+	private String insertSql=
+			"INSERT INTO REPLY "
+			+ "(board_no,title,contents,user_id,img_path) "
+			+ " VALUES (?,?,?,?,?)";
 	private final int ROWS=10;
 	private String detailSql="SELECT * FROM REPLY WHERE reply_no=?";
-	private String updateSql="UPDATE REPLY SET title=?, contents=? WHERE reply_no=?";
+	private String updateSql="UPDATE REPLY SET title=?, contents=?,img_path=? WHERE reply_no=?";
 	private String deleteSql="DELETE FROM REPLY WHERE reply_no=?";
 	public ReplyDaoImp() throws Exception {
 		conn=SpringBoardDB.getConn();
 	}
+	@Override
+	public int insert(ReplyDto reply) throws ClassNotFoundException, SQLException {
+		int insert=0;
+		pstmt=conn.prepareStatement(insertSql);
+		pstmt.setInt(1, reply.getBoard_no());
+		pstmt.setString(2, reply.getTitle());
+		pstmt.setString(3, reply.getContents());
+		pstmt.setString(4, reply.getUser_id());
+		pstmt.setString(5, reply.getImg_path());
+		insert=pstmt.executeUpdate();
+		return insert;
+	}
+
 	@Override
 	public List<ReplyDto> list(int page) throws ClassNotFoundException, SQLException {
 		return null;
@@ -52,22 +69,13 @@ public class ReplyDaoImp implements ReplyDao{
 		pstmt=conn.prepareStatement(updateSql);
 		pstmt.setString(1, reply.getTitle());
 		pstmt.setString(2, reply.getContents());
-		pstmt.setInt(3, reply.getReply_no());
+		pstmt.setString(3, reply.getImg_path());
+
+		pstmt.setInt(4, reply.getReply_no());
 		update=pstmt.executeUpdate();
 		return update;
 	}
 
-	@Override
-	public int insert(ReplyDto reply) throws ClassNotFoundException, SQLException {
-		int insert=0;
-		pstmt=conn.prepareStatement(insertSql);
-		pstmt.setInt(1, reply.getBoard_no());
-		pstmt.setString(2, reply.getTitle());
-		pstmt.setString(3, reply.getContents());
-		pstmt.setString(4, reply.getUser_id());
-		insert=pstmt.executeUpdate();
-		return insert;
-	}
 
 	@Override
 	public int delete(Integer replyNo) throws ClassNotFoundException, SQLException {

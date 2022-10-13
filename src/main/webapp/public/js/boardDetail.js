@@ -70,14 +70,10 @@ function replyUpdateReq(e){
 }
 function replyUpdateAct(e){
 	const form=e.target.form; //입렵요소에만 있는 선택자 form
+	const data=new FormData(form);
 	let updateUrl="./replyUpdate.do"
-	let param="?boardNo="+form.boardNo.value
-			+"&title="+form.title.value
-			+"&contents="+form.contents.value
-			+"&userId="+form.userId.value
-			+"&replyNo="+form.replyNo.value;
 	//{insert : 0,1 }		
-	fetch(updateUrl+param,{method:"POST"})
+	fetch(updateUrl,{method:"POST",body:data})
 		.then((resp)=>{
 			if(resp.status==200){
 				return resp.json();
@@ -121,12 +117,9 @@ function replyDeletAct(e){
 replyInsert.onsubmit=function (e){
 	e.preventDefault();//이벤트 중지! 
 	let insertUrl="./replyInsert.do";
-	let param="?boardNo="+replyInsert.boardNo.value
-			+"&title="+replyInsert.title.value
-			+"&contents="+replyInsert.contents.value
-			+"&userId="+replyInsert.userId.value
-
-	fetch(insertUrl+param,{method:"POST"})
+	const data=new FormData(this);
+	//FormData : blob data 전송시 사용가능
+	fetch(insertUrl,{method:"POST",body:data})
 		.then((resp)=>resp.json())
 		.then((insertJosn)=>{
 			if(insertJosn.insert>0){
