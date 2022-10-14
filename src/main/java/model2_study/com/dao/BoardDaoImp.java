@@ -29,9 +29,14 @@ public class BoardDaoImp implements BoardDao {
 //							+ " INNER JOIN USER u USING(user_id) "
 //							+ " LEFT JOIN REPLY r USING (board_no) "
 //							+ " WHERE board_no=?";
-	private String detailSql="SELECT * FROM BOARD INNER JOIN USER USING(user_id) WHERE board_no=?";
+	private String detailSql="SELECT *, board_no no, "
+			+ " (SELECT COUNT(*)FROM BOARD_PREFER WHERE board_no=no AND prefer=1) likes,"
+			+ " (SELECT COUNT(*)FROM BOARD_PREFER WHERE board_no=no AND prefer=0) bads"
+			+ " FROM BOARD INNER JOIN USER USING(user_id) WHERE board_no=?";
 	private String listSql="SELECT *,board_no no,"
 			+ " (SELECT COUNT(*) FROM REPLY WHERE board_no=no) reply_count,"
+			+ " (SELECT COUNT(*) FROM BOARD_PREFER WHERE board_no=no AND prefer=1) likes,"
+			+ " (SELECT COUNT(*) FROM BOARD_PREFER WHERE board_no=no AND prefer=0) bads,"
 			+ " (SELECT img_path FROM BOARD_IMG WHERE board_no=no LIMIT 0,1) thumb_path"
 			+ " FROM BOARD ORDER BY board_no DESC LIMIT ?,?";
 	private String countSql="SELECT COUNT(*) FROM BOARD";
@@ -92,6 +97,9 @@ public class BoardDaoImp implements BoardDao {
 			board.setContents(rs.getString("contents"));
 			board.setUser_id(rs.getString("user_id"));
 			board.setPost_time(rs.getDate("post_time"));
+			board.setLikes(rs.getInt("likes"));
+			board.setBads(rs.getInt("bads"));
+
 			UserDto user=new UserDto();
 			user.setUserId(rs.getString("user_id"));
 			user.setPw(rs.getString("pw"));
@@ -128,6 +136,8 @@ public class BoardDaoImp implements BoardDao {
 			board.setPost_time(rs.getDate("post_time"));
 			board.setReplyCount(rs.getInt("reply_count"));
 			board.setThumbPath(rs.getString("thumb_path"));
+			board.setLikes(rs.getInt("likes"));
+			board.setBads(rs.getInt("bads"));
 			boardList.add(board);
 		}
 		return boardList;

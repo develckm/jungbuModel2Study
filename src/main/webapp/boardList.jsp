@@ -47,7 +47,11 @@ h1 {
 	<main>
 		<table id="boardList">
 			<thead>
-				<tr><th>번호</th><th>제목</th><th>이미지</th><th>게시일</th><th>글쓴이</th><th>조회</th><th>댓글</th></tr>
+				<tr>
+					<th>번호</th><th>제목</th><th>이미지</th>
+					<th>게시일</th><th>글쓴이</th><th>조회</th>
+					<th>댓글</th><th>likes</th><th>bads</th>
+				</tr>
 			</thead>
 			<tbody>
 			
@@ -68,6 +72,8 @@ h1 {
 					<td><%=board.getUser_id()%></td>
 					<td><%=board.getViews()%></td>
 					<td><%=board.getReplyCount()%></td>
+					<td><%=board.getLikes()%></td>
+					<td><%=board.getBads()%></td>
 					
 				</tr>
 				<% 

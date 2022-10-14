@@ -30,7 +30,22 @@ public class BoardDto {
 	
 	private int replyCount; //sub query 
 	private String thumbPath; //sub query
+	private int likes; //sub query (board_pefer WHERE prefer=1)
+	private int bads;  //sub query (board_pefer WHERE prefer=0)
 	
+	
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+	public int getBads() {
+		return bads;
+	}
+	public void setBads(int bads) {
+		this.bads = bads;
+	}
 	public String getThumbPath() {
 		return thumbPath;
 	}

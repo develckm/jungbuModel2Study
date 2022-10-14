@@ -41,6 +41,37 @@ if(board_obj!=null){
 		</p>
 		<h2><span><%=board.getBoard_no()%></span>.<%=board.getTitle() %></h2>
 		<div>
+<style>
+#preferContainer button.prefer{
+	padding: 10px;
+	border-radius: 30px;
+}	
+#preferContainer button.prefer.active{
+    box-shadow: inset -2px -1px 1px 1px rgb(0 0 0 / 80%);
+}
+#likesBtn{
+	background-color: rgb(100,200,255);
+}
+#badsBtn{
+	background-color: rgb(255,100,100);
+}
+
+</style>		
+		 	<p><%=request.getAttribute("boardPrefer") %></p>
+			<p id="preferContainer">
+				<button id="likesBtn" class="prefer active">
+					좋아요
+					<strong>
+						<%=board.getLikes()%>
+					</strong>
+				</button>
+				<button id="badsBtn" class="prefer">
+					싫어요
+					<strong>
+						<%=board.getBads()%>
+					</strong>
+				</button>
+			</p>
 			<p>
 				<strong><%=board.getUser_id()%></strong> 
 				<span>(<%=board.getUser().getName() %>)</span>
