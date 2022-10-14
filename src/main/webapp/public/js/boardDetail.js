@@ -147,6 +147,15 @@ async function boardPreferModify(e,prefer){//prefer 1: 좋아요,0:싫어요
 			case 2 :msg+=" 수정 성공"; break;
 			case 3 :msg+=" 삭제 성공"; break;
 		}
+		if(json.modify>0){ 
+			let resp=await fetch("./boardPreferDetail.do?boardNo="+boardNo);
+			if(resp.status==200){
+				let text=await resp.text();//html
+				preferContainer.innerHTML=text;
+			}else{
+				msg+=" 했지만 페이지를 불러오지 못함(새로고침 하세요!)"
+			}
+		}
 	}else{
 		msg="통신 실패!";
 	}
