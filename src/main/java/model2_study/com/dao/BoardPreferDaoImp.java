@@ -13,7 +13,9 @@ public class BoardPreferDaoImp implements BoardPreferDao{
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	String detailFindbyUserIdAndBoardNoSql="SELECT * FROM BOARD_PREFER WHERE user_id=? AND board_no=?";
-	
+	String insertSql="INSERT INTO BOARD_PREFER (board_no,prefer,user_id) VALUES (?,?,?)";
+	String updateSql="UPDATE BOARD_PREFER set prefer=? WHERE board_prefer_no=?";
+	String deleteSql="DELETE FROM BOARD_PREFER WHERE board_prefer_no=?";
 	public BoardPreferDaoImp() throws Exception{
 		conn=SpringBoardDB.getConn();
 	}
@@ -54,26 +56,44 @@ public class BoardPreferDaoImp implements BoardPreferDao{
 
 	@Override
 	public int update(BoardPreferDto dto) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int update=0;
+		pstmt=conn.prepareStatement(updateSql);
+		pstmt.setInt(1, dto.getPrefer());
+		pstmt.setInt(2, dto.getBoard_prefer_no());
+		update=pstmt.executeUpdate();
+		return update;
 	}
 
 	@Override
 	public int insert(BoardPreferDto dto) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		//board_no,prefer,user_id
+		int insert=0;
+		pstmt=conn.prepareStatement(insertSql);
+		pstmt.setInt(1, dto.getBoard_no());
+		pstmt.setInt(2, dto.getPrefer());
+		pstmt.setString(3, dto.getUser_id());
+		insert=pstmt.executeUpdate();
+		return insert;
 	}
 
 	@Override
 	public int delete(Integer pk) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int delete=0;
+		pstmt=conn.prepareStatement(deleteSql);
+		pstmt.setInt(1, pk);
+		delete=pstmt.executeUpdate();
+		return delete;
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-		
+		try {
+			if(rs!=null)rs.close();
+			if(pstmt!=null)pstmt.close();
+			if(conn!=null)conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

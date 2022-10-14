@@ -1,3 +1,4 @@
+<%@page import="model2_study.com.dto.BoardPreferDto"%>
 <%@page import="model2_study.com.dto.BoardImgDto"%>
 <%@page import="model2_study.com.dto.ReplyDto"%>
 <%@page import="model2_study.com.dto.BoardDto"%>
@@ -57,15 +58,28 @@ if(board_obj!=null){
 }
 
 </style>		
-		 	<p><%=request.getAttribute("boardPrefer") %></p>
+<%
+Object boardPrefer_obj=request.getAttribute("boardPrefer");
+Boolean prefer=null; //true linkes.active, false bads.active
+if(boardPrefer_obj!=null){
+	BoardPreferDto boardPrefer=(BoardPreferDto)boardPrefer_obj;
+	prefer=(boardPrefer.getPrefer()==1)?true:false;
+}
+%>
 			<p id="preferContainer">
-				<button id="likesBtn" class="prefer active">
+				<button id="likesBtn" value="<%=board.getBoard_no()%>" class="prefer 
+				<%=(prefer!=null&&prefer)?"active":""%>"
+				onclick="boardPreferModify(event,1)"
+				>
 					좋아요
 					<strong>
 						<%=board.getLikes()%>
 					</strong>
 				</button>
-				<button id="badsBtn" class="prefer">
+				<button id="badsBtn" value="<%=board.getBoard_no()%>" class="prefer 
+				<%=(prefer!=null&&!prefer)?"active":""%>"
+				onclick="boardPreferModify(event,0)"
+				>
 					싫어요
 					<strong>
 						<%=board.getBads()%>

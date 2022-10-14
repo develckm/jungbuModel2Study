@@ -130,9 +130,32 @@ replyInsert.onsubmit=function (e){
 			}
 		});
 }
-setTimeout( a,1000*60);
-function a(){
-	alert("sss");
+async function boardPreferModify(e,prefer){//prefer 1: 좋아요,0:싫어요
+	//promise 객체를 await로 호출할 수 있는 함수 : await를 호출하면 .then((param)=>{}) param이 반환된다.
+	let boardNo=e.target.value;
+	let url="./boardPreferModify.do?boardNo="+boardNo+"&prefer="+prefer;
+	//fetch(url).then((resp)=>resp.json()).then((json)=>{})
+	let msg=(prefer==1)?"좋아요":"싫어요";
+	let resp=await fetch(url);
+	if(resp.status==200){
+		let json=await resp.json();
+		console.log(json);
+		switch(json.modify){
+			case -1 :msg="로그인을 하세요!"; break;
+			case 0 :msg+=" 수정 실패!"; break;
+			case 1 :msg+=" 등록 성공"; break;
+			case 2 :msg+=" 수정 성공"; break;
+			case 3 :msg+=" 삭제 성공"; break;
+		}
+	}else{
+		msg="통신 실패!";
+	}
+	alert(msg);
 }
+
+
+
+
+
 
 
