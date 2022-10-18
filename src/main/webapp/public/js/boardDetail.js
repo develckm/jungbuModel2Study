@@ -52,31 +52,37 @@ function reload(){
 	//onreadystatechange 정의하거나 Promise로 스레드를 동기화 해야한다. 
 }
 
-function replyUpdateReq(e){
+async function replyUpdateReq(e){
 	//this  event가 발생한 node	
 	let replyNo=e.target.value;
 	let updateUrl="./replyUpdate.do?replyNo="+replyNo;
-	fetch(updateUrl,{method:"GET"})
-		.then((resp)=>{
-			if(resp.status==200){
-				return resp.text();
-			}else if(resp.status==400){ 
-				alert("로그인을 해야 이용할 수 있는 서비스 입니다.");
-			}else{
-				alert("요청한 댓글을 찾을 수 없습니다.");
+	try{
+		let resp=await fetch(updateUrl,{method:"GET"});
+		if(resp.status==200){
+			let html=await resp.text();
+			const li=document.querySelector("#replyLi"+replyNo)
+			li.innerHTML=html;					
+		}else if(resp.status==400){ 
+			let json=await resp.json();
+			if(json.status==-1){
+				alert("로그인 하세요");
+			}else if(json.status==-2){
+				alert("작성한 사람만 수정 가능");
 			}
-		}).then((html)=>{
-			if(html){
-				const li=document.querySelector("#replyLi"+replyNo)
-				li.innerHTML=html;				
-			}
-		})
+		}else{
+			alert("요청한 페이지를 찾을 수 없습니다.");
+		}		
+	}catch(e){
+		alert("서버를 요청할 수 없음");
+	}
 }
 function replyUpdateAct(e){
 	const form=e.target.form; //입렵요소에만 있는 선택자 form
-	const data=new FormData(form);
-	let updateUrl="./replyUpdate.do"
+	let replyNo=form.replyNo.value;
+	const data=new FormData(form); //blob 모든 파라미터를 서블릿에 전달
+	let updateUrl="./replyUpdate.do?replyNo="+replyNo;
 	//{insert : 0,1 }		
+	//asyn 함수로 바꾸고 resp.status가 400일때 로그인과 유저 처리하세요!
 	fetch(updateUrl,{method:"POST",body:data})
 		.then((resp)=>{
 			if(resp.status==200){
@@ -91,7 +97,7 @@ function replyUpdateAct(e){
 			}else{
 				alert("수정 실패! 새로 고치고 다시 시도하세요.(삭제된 레코드이거나 db 통신 오류)")
 			}
-		})
+		});
 }
 function replyDeletAct(e){
 	const form=e.target.form;
