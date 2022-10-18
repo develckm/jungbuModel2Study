@@ -58,14 +58,18 @@ function replyUpdateReq(e){
 	let updateUrl="./replyUpdate.do?replyNo="+replyNo;
 	fetch(updateUrl,{method:"GET"})
 		.then((resp)=>{
-			if(resp.status!=200){
-				alert("요청한 댓글을 찾을 수 없습니다.");
-			}else{
+			if(resp.status==200){
 				return resp.text();
+			}else if(resp.status==400){ 
+				alert("로그인을 해야 이용할 수 있는 서비스 입니다.");
+			}else{
+				alert("요청한 댓글을 찾을 수 없습니다.");
 			}
 		}).then((html)=>{
-			const li=document.querySelector("#replyLi"+replyNo)
-			li.innerHTML=html;
+			if(html){
+				const li=document.querySelector("#replyLi"+replyNo)
+				li.innerHTML=html;				
+			}
 		})
 }
 function replyUpdateAct(e){
